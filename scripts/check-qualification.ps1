@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 $path = (Resolve-Path -LiteralPath $Record).Path
 $record = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
-if ($record.schema -ne 1 -or $record.release -ne "QLIC 1.0.0" -or
+if ($record.schema -ne 1 -or $record.release -ne "QLIC 1.0.1" -or
     $record.source_revision_kind -ne "qlic-source-tree-sha256-v1" -or
     $record.source_revision -notmatch '^[0-9a-fA-F]{64}$') {
   throw "Qualification record identity is invalid: $path"

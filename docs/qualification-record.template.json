@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "QLIC 1.0.0",
+  "release": "QLIC 1.0.1",
   "source_revision_kind": "qlic-source-tree-sha256-v1",
   "source_revision": "REPLACE_WITH_GET_SOURCE_REVISION_OUTPUT",
   "windows": {

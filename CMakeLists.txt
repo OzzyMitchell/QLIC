@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(qlic VERSION 1.0.0 LANGUAGES C)
+project(qlic VERSION 1.0.1 LANGUAGES C)
 
 if(WIN32)
   enable_language(RC)
@@ -322,6 +322,7 @@ if(BUILD_TESTING)
   set(QLIC_TEST_TARGETS
     qlic-api-test
     qlic-api-shared-test
+    qlic-encode-candidate-test
     qlic-wide-fuzz-test
     qlic-hdr-fuzz-test
     qlic-planar-med-fuzz-test
@@ -341,6 +342,34 @@ if(BUILD_TESTING)
 
   add_executable(qlic-api-shared-test tests/api_test.c)
   target_link_libraries(qlic-api-shared-test PRIVATE qlic_library Threads::Threads)
+
+  add_executable(qlic-encode-candidate-test tests/encode_candidate_test.c
+    codec/src/stream.c codec/src/parallel.c codec/src/lzms.c
+    ${QLIC_MAP_SOURCES})
+  target_link_libraries(qlic-encode-candidate-test PRIVATE Threads::Threads)
+  if(WIN32)
+    qlic_windows_target(qlic-encode-candidate-test)
+    target_link_libraries(qlic-encode-candidate-test PRIVATE cabinet)
+  endif()
+  if(TARGET qlic_wimlib)
+    target_compile_definitions(qlic-encode-candidate-test PRIVATE QLIC_HAVE_WIMLIB)
+    target_link_libraries(qlic-encode-candidate-test PRIVATE qlic_wimlib)
+  endif()
+  add_test(NAME qlic-encode-empty-candidate COMMAND qlic-encode-candidate-test empty)
+  add_test(NAME qlic-encode-palette-boundary COMMAND qlic-encode-candidate-test rgb 4000)
+  foreach(layout IN ITEMS rgb rgba gray graya)
+    add_test(NAME qlic-encode-large-palette-${layout}
+      COMMAND qlic-encode-candidate-test ${layout} 4001)
+    set_tests_properties(qlic-encode-large-palette-${layout}
+      PROPERTIES TIMEOUT 120)
+  endforeach()
+  foreach(colors IN ITEMS 1 2 16 256 257)
+    add_test(NAME qlic-encode-large-palette-${colors}
+      COMMAND qlic-encode-candidate-test rgb 4001 ${colors})
+    set_tests_properties(qlic-encode-large-palette-${colors}
+      PROPERTIES TIMEOUT 120)
+  endforeach()
+  set_tests_properties(qlic-encode-palette-boundary PROPERTIES TIMEOUT 120)
 
   add_executable(qlic-wide-fuzz-test tests/wide_fuzz_test.c)
   target_compile_definitions(qlic-wide-fuzz-test PRIVATE QLIC_STATIC)

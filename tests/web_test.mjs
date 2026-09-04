@@ -543,4 +543,35 @@ if (mode45Path) {
   }
 }
 
+// Cross the large-image threshold with noisy palette data and hidden RGB.
+{
+  const width = 4000;
+  const height = 4001;
+  const pattern = new Uint8Array(256 * 4);
+  let state = 0xb1834e29;
+  for (let i = 0; i < 256; ++i) {
+    state ^= state << 13;
+    state ^= state >>> 17;
+    state ^= state << 5;
+    const color = (state >>> 0) % 7;
+    pattern.set([
+      color & 1 ? 255 : 0,
+      color & 2 ? 255 : 0,
+      color & 4 ? 255 : 0,
+      color >= 4 ? (color === 4 ? 0 : 127) : 255
+    ], i * 4);
+  }
+  const source = new Uint8Array(width * height * 4);
+  for (let offset = 0; offset < source.length; offset += pattern.length)
+    source.set(pattern.subarray(0, source.length - offset), offset);
+  const encoded = qlic.encode(source, width, height);
+  if (encoded.length <= 32)
+    throw new Error("large palette input produced an empty QLIC file");
+  const decoded = qlic.decode(encoded);
+  if (decoded.width !== width || decoded.height !== height ||
+      decoded.frames.length !== 1 ||
+      !Buffer.from(decoded.frames[0].rgba).equals(Buffer.from(source)))
+    throw new Error("large palette RGBA round trip differs");
+}
+
 console.log("QLIC WebAssembly tests passed");

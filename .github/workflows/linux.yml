@@ -34,7 +34,7 @@ jobs:
           build/ci-consumer/qlic-package-consumer-static
           LD_LIBRARY_PATH="$PWD/build/ci-install/lib" build/ci-consumer/qlic-package-consumer-shared
           export PKG_CONFIG_PATH="$PWD/build/ci-install/lib/pkgconfig"
-          test "$(pkg-config --modversion qlic)" = "1.0.0"
+          test "$(pkg-config --modversion qlic)" = "1.0.1"
           cc tests/package_consumer/main.c -o build/qlic-pkg-config-consumer $(pkg-config --cflags --libs qlic)
           LD_LIBRARY_PATH="$PWD/build/ci-install/lib" build/qlic-pkg-config-consumer
 

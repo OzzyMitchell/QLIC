@@ -7552,7 +7552,7 @@ static int enc_best_base(const Image *im, Candidate *best) {
                            stream_codecs, 1))
             palette_ok = 0;
         }
-        palette_done = 1;
+        palette_done = best->compressed != NULL;
       }
       if (palette_ok && !palette_done && large_palette &&
           !try_cpal(best, &index_runs, &palette, TRANSFORM_CPAL_DELTA,
@@ -7671,6 +7671,10 @@ static int enc_best(const Image *im, Candidate *best) {
 }
 
 static int mk_file(const Image *im, const Candidate *cand, Buf *file) {
+  if (!cand->compressed || !cand->compressed_size || !cand->payload_size) {
+    set_err("no compression candidate was produced");
+    return 0;
+  }
   uint8_t header[QLIC_HEADER_SIZE];
   memset(header, 0, sizeof(header));
   memcpy(header, QLIC_MAGIC, QLIC_MAGIC_SIZE);
