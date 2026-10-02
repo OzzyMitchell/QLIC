@@ -1,16 +1,13 @@
 # QLIC profiles
 
-QLIC has one container and several deliberately separate profiles. A decoder
-must say which profiles it implements. Saying only "QLIC compatible" is not
-specific enough.
+QLIC has one container and several deliberately separate profiles.
 
-This document defines the QLIC 1.0 profile split. Profile names and required
-features are fixed by the checked conformance manifest. This is a stable
-reference-source compatibility contract, not a standards-body claim.
+Profile names and required features are fixed by the checked conformance manifest.
+This is a stable reference source compatibility contract.
 
 ## Core Still 1
 
-Core Still 1 is the portable lossless 8-bit still-image profile. It is the
+Core Still 1 is the portable lossless 8-bit still image profile. It is the
 default profile for SDKs, browsers, asset pipelines, and the safe Rust decoder.
 
 A Core Still 1 decoder must implement:
@@ -27,7 +24,7 @@ A Core Still 1 decoder must implement:
   entropy payloads.
 
 Core Still 1 never depends on PNG, WIC, libjxl, libwebp, a Windows compression
-API, or floating-point arithmetic. LZMS decoding is part of the profile and is
+API, or floating point arithmetic. LZMS decoding is part of the profile and is
 implemented in portable C and safe Rust in this repository.
 
 The outer mode-14 band count is at most 65,536 in the wire format. A Core

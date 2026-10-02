@@ -1,13 +1,13 @@
 # QLIC WebAssembly
 
-The Web package is an importable browser module. It needs no QLIC executable,
+The Web package is an importable browser module. It doesn't need any sort of QLIC executable,
 DLL, or local service.
 
 Keep `qlic-web.js` and `qlic-web.wasm` together on an HTTP(S) host.
 `qlic-web.d.ts` contains TypeScript declarations, and `qlic-worker.js` shows a
 module-worker integration.
 
-The built `index.html` is a self-contained offline encoder and viewer. It
+The built `index.html` is a self contained offline encoder and viewer. It
 opens QLIC files, renders stills and animation, inspects pixels, exports PNG,
 and supports wheel, drag, and pinch gestures. It is responsive on desktop and
 mobile and works through `file://` where the browser permits local pages. Use
@@ -60,7 +60,7 @@ const encoded = qlic.encode(rgba, width, height);
 `rgba` must contain exactly `width * height * 4` bytes. The returned
 `Uint8Array` owns its data. Encoding may run in a module worker.
 
-To create an RGBA8 PNG without a canvas conversion:
+To create an RGBA8 PNG without any canvas conversion:
 
 ```js
 const png = await qlic.encodePng(rgba, width, height);
@@ -78,9 +78,9 @@ const hdr = qlic.decodeHdr(hdrBytes);
 
 Wide output is a `Uint16Array` for 9--16 bits or `Uint32Array` for 17--24
 bits. HDR output also carries ICC, CICP, mastering-display, content-light,
-alpha, and opaque EXIF/XMP/IPTC/JUMBF metadata. QLIC does not tone-map, convert,
-or interpret those records. Rec. 2100 PQ and HLG are returned with transfer
-characteristics 16 and 18 respectively; retained fixtures verify both metadata
+alpha, and opaque EXIF/XMP/IPTC/JUMBF metadata. QLIC does not tone-map, convert, interpret or otherwise mess with
+those records. Rec. 2100 PQ and HLG are returned with transfer
+characteristics 16 and 18 respectively; saved fixtures will verify both metadata
 and exact samples.
 
 ## Limits
@@ -90,14 +90,14 @@ Defaults are 256 MiB input/payload, 33,554,432 pixels per frame, 4,096 frames,
 boundary when needed.
 
 Browser image input accepts formats the browser can decode and renders them to
-RGBA8. Known lossy JPEG and WebP sources show a size warning. This input path
+RGBA8. Lossy JPEG and WebP sources show a size warning. This input path
 cannot preserve source precision, metadata, animation, or hidden RGB under zero
 alpha. QLIC input decodes animation and exact RGBA8. Wide and HDR QLIC files use
 a clearly labeled 8-bit SDR preview; the API still returns their exact samples
 and metadata.
 
 The responsive page is QLIC's current mobile surface. A native iOS or Android
-port is separate future work.
+port is future work.
 
 ## Build
 

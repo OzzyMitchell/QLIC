@@ -11,7 +11,7 @@
 | Header only | — | `qlic_get_info_v2` |
 | Full integrity check without retained output | — | `qlic_validate` |
 
-Query the linked library instead of guessing from a version string:
+Query the linked library to see what it supports so you don't need to work it out from the version string:
 
 ```c
 qlic_capabilities capabilities = {0};
@@ -24,8 +24,8 @@ if (qlic_get_capabilities(&capabilities) == QLIC_OK &&
 
 `qlic_validate` fully decodes the selected still, animation, wide, or HDR
 grammar, verifies outer and inner checksums, and immediately releases decoded
-storage. Use it for ingestion checks where `qlic_get_info_v2` is intentionally
-too shallow and the caller does not need the pixels.
+storage. Use it for ingestion checks where `qlic_get_info_v2` is evidently
+too shallow and the caller doesn't need the pixels.
 
 Profiles are independent bits for Core Still, animation, wide integer, HDR,
 and retained legacy syntax. Feature bits report threads, v2 resource limits,
@@ -77,15 +77,15 @@ if (status == QLIC_OK) {
 }
 ```
 
-QLIC deliberately has one automatic encode policy. `qlic_encode_options`
+There is only one automatic encode policy, by design, of course. `qlic_encode_options`
 controls only the worker limit; `flags` and `reserved` must be zero. Internal
-benchmark builds may compare alternative search or decode-cost rules, but the
-public C API exposes one automatic policy.
+benchmark builds might compare alternative search or decode-cost rules, but the
+public C API uses one automatic policy.
 
 The options struct remains 16 bytes. Initialize it with
-`qlic_encode_options_default` so future additive fields remain safe.
+`qlic_encode_options_default` so future additive fields stay safe.
 
-The byte count has to cover the final row, and the stride has to cover one RGBA row. A thread count of zero means one thread. Values above the available hardware count are clamped. Files from this tree use the same decoder on every supported platform.
+The byte count has to cover the final row, and the stride has to cover one RGBA row. A thread count of zero means one thread. Values above the available hardware count are clamped. Files from this tree use the same decoder on every supported platform
 
 ## Exact 9 through 24-bit samples
 
@@ -329,6 +329,6 @@ Input memory stays with the caller and has to remain valid until the call return
 
 Initialize option and limit structs with their matching default function.
 `struct_size` allows a newer library to accept a larger caller struct. Unknown
-flags and decode-limit reserved fields must remain zero. `QLIC_API_VERSION`
-identifies the public source/ABI contract; it is separate from the file-format
+flags and decode limit reserved fields must remain zero. `QLIC_API_VERSION`
+identifies the public source/ABI contract, making it separated from the fileformat
 compatibility promise.

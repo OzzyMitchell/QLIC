@@ -1,7 +1,7 @@
 # QLIC WIC decoder
 
-This read-only Windows Imaging Component codec serves Explorer and WIC apps. It
-exposes these formats without changing samples:
+This read only Windows Imaging Component codec serves Explorer and WIC apps. It
+supports these formats:
 
 - 8-bit Gray, RGB, straight RGBA, and premultiplied PRGBA;
 - 16-bit Gray, RGB, straight RGBA, and premultiplied PRGBA;
@@ -30,12 +30,12 @@ For scripted setup:
 ```
 
 The installer copies the decoder, GUI, CLI, and runtime files to a stable
-content-addressed folder before registration. Moving the downloaded package
+content addressed folder before registration. Moving the downloaded package
 does not break the install. Double-click `uninstall-wic.cmd` or run
 `uninstall-wic.ps1` to remove it.
 
-QLIC does not offer a per-user WIC install. Windows' WIC component enumerator
-does not treat per-user COM keys as an installed codec.
+QLIC doesn't offer a per user WIC install. Windows' WIC component enumerator
+doesn't treat per user COM keys as an installed codec either.
 
 ## Open files
 
@@ -43,15 +43,15 @@ The default `.qlic` command opens the original file in the QLIC GUI. Its viewer
 decodes off the UI thread, preserves the filename, composites straight and
 premultiplied alpha, applies embedded ICC profiles through Windows Color
 Management when available, plays RGBA8 animation, and accepts 8--24-bit
-integer stills. PQ/HLG content is labeled as an SDR preview; opening it never
-changes stored samples or metadata.
+integer stills. PQ/HLG content is labeled as an SDR preview. Opening it never
+changes the stored samples or any of the metadata.
 
 If the GUI is absent, registration uses Windows Photo Viewer where available.
 
 **Open in Microsoft Photos (compatibility)** is optional. Microsoft Photos does
 not declare `.qlic` in its signed manifest, so the command creates an exact-byte
 private `.qlic.png` alias in `%TEMP%\QLIC-Photos`. It does not transcode or
-rewrite metadata. This is also the fallback where Photo Viewer is unavailable.
+rewrite metadata. This is also used as the fallback where Photo Viewer is unavailable.
 
 ## Color, alpha, and metadata
 

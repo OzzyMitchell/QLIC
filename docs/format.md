@@ -60,9 +60,9 @@ Native mode 42 stores the same predictor in independent 128 row bands for each p
 Native modes 43 through 54 keep the mode 37 residual and predictor map syntax while adding richer residual contexts. Mode 43 carries causal state between transformed color planes. Mode 44 adds local zero and sign state. Mode 45 adds spatial residual state and can omit the predictor map when the tile log is zero. Modes 46 through 50 add child, coarse, full coarse, root, and slower root probability levels. Mode 51 adds sign state for each predictor. Mode 52 conditions sign state on residual magnitude. Mode 53 refines zero, magnitude, and sign mixtures with update rates based on magnitude. Mode 54 retains those refined contexts and adds the causal weighted predictor as predictor-map entry 31. Every finalized mode has a distinct identifier and decoding behavior.
 
 Mode 54 remains part of the stable decoder syntax, but the ordinary encoder no
-longer selects it: its approximately one-percent retained size gain cost about
+longer selects it, as Its approximately one-percent retained size gain cost about
 thirty percent in measured decode time. Forced benchmark trials and an explicit
-stream-trace opt-in retain the historical encoder experiment without charging
+stream-trace opt-in keep the historical encoder experiment without charging
 ordinary files.
 
 Native transforms 11 through 28 use reversible weighted red and green prediction for the blue plane. Transforms 29 through 34 add a reversible luma lift around the same red and green difference. Transform 35 uses red as the anchor and predicts blue from the red and green average. Transforms 36 and 37 use blue as the anchor and a fixed 40/24 blend to predict green from red/blue or red from green/blue. Transform 38 predicts the blue channel from a quadratic red/green tangent-space relation. Transform 39 uses a bounded integer approximation of the spherical tangent-space relation. Transform 40 uses the same spherical predictor while storing green in its native eight-bit range. All three are documented in `predictor-math.md`. Native decoders accept transform identifiers through 40.

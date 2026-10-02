@@ -1,9 +1,8 @@
-# QLIC 1.0 benchmark checkpoint
+# QLIC 1.0 benchmark current
 
-This is the sanitized, human-readable record of the current 3,167-image gate.
-The full development workspace retains per-file rows, executable and library
+The full development workspace keeps per-file rows, executable and library
 hashes, source manifests, PGO input, timing rotations, and rejected
-experiments. Personal filesystem paths are intentionally omitted here.
+experiments.
 
 ## Corpus and method
 
@@ -15,20 +14,14 @@ interfaces, icons, transparent isolated objects, RGB, and RGBA. No production
 route reads a filename, directory, dataset label, or category.
 
 Every encoded result is decoded and compared byte-for-byte with the normalized
-source. Encoders run on one pinned logical processor with rotated order. Encode
+source. Encoders run on one pinned logical processor with rotated order for fairness. Encode
 wall time includes startup and file I/O. Decode timing uses the exact retained
 files, performs an untimed exact decode, then averages three pinned process
 runs per file. Decode wall time includes process startup and output file I/O.
 The machine was an AMD Ryzen 9 9950X3D running Windows 11. QLIC uses the
 portable x86-64 Clang 22.1.4 Release build shipped here: no `-march=native` and
 no PGO. The final release rerun covers QLIC, JPEG XL effort 9, and WebP preset
-6. Other encode effort rows come from the retained same-machine sweep.
-
-This is a development and release gate, not a universal codec ranking. Changes
-must pass per-file exactness, worst-regression, content-class, decode-time, and
-memory checks. New routing rules are developed on discovery data and frozen
-before an untouched holdout; a same-sample win is not enough. Completed bytes,
-not proxy scores, decide every candidate accepted by the encoder.
+6.
 
 ## Encode
 
@@ -61,8 +54,7 @@ than JPEG XL effort 9 on 1,861 files, larger on 1,304, and tied on two.
 
 The current QLIC total is the sum of all 3,167 retained per-image rows produced
 by the published `qlic.exe`; every result decoded exactly. QLIC, JPEG XL effort
-9, and WebP preset 6 were timed together in the final release campaign. The
-other effort rows remain as same-machine context from the retained sweep.
+9, and WebP preset 6 were timed together in the final release campaign.
 
 ## Decode
 
@@ -72,9 +64,9 @@ other effort rows remain as same-machine context from the retained sweep.
 | JPEG XL effort 9 files | 307.602 | 6.386 | 29.83% slower |
 | WebP preset 6 files | 117.887 | 16.663 | 50.24% faster |
 
-QLIC is not the universal decode-speed winner. WebP is faster on this corpus.
+QLIC is not the decode-speed winner. WebP is faster on this corpus.
 QLIC uses 22.98% less decode time than JPEG XL effort 9 while producing a
-slightly smaller total. WebP preset 6 uses 50.24% less decode time than QLIC
+slightly smaller total (On this corpus atleast). WebP preset 6 uses 50.24% less decode time than QLIC
 while its files total 128,604,290 bytes more.
 
 ## Corpus variation
@@ -86,4 +78,4 @@ when decode latency dominates storage. The encoder therefore uses low-cost
 content signals only to decide which bounded candidate to try, then
 requires an exact completed-file win. It never forces a specialist from the
 content label, and rejected trials remain part of the benchmark ledger so a
-future optimization cannot reintroduce them unnoticed.
+future optimization won't introduce them ideally.
